@@ -2,15 +2,19 @@
 
 namespace App\Exceptions;
 
+use App\Traits\ApiResponser;
 use Exception;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponser;
     /**
      * A list of the exception types that should not be reported.
      *
@@ -18,7 +22,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         AuthorizationException::class,
-        HttpException::class,
+        //HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
     ];
@@ -45,6 +49,27 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        if($exception instanceof HttpException){
+            $code = $exception->getStatusCode();
+            $message = Response::$statusTexts[$code];
+            $response =  $this->errorResponse($message, $code);
+        }elseif($exception instanceof ModelNotFoundException){
+            $model = mb_strtolower(class_basename($exception->getModel()));
+            $response = $this->errorResponse("Don't exist any instance of {$model} with the given id", Response::HTTP_NOT_FOUND);
+        }elseif ($exception instanceof AuthorizationException) {
+            $response = $this->errorResponse($exception->getMessage(), Response::FORBIDDEN);
+        }elseif ($exception instanceof AuthenticationException) {
+            $response = $this->errorResponse($exception->getMessage(), Response::UNAUTHORIZED);
+        }elseif ($exception instanceof ValidationException) {
+            $errors = $exception->validator->errors()->getMessages();
+            $response = $this->errorResponse($errores, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }elseif ($exception instanceof \ErrorException && env('APP_DEBUG', false)) {
+            $response = $this->errorResponse($exception->getMessage(), Response::HTTP_PRECONDITION_REQUIRED);
+        }else{
+            $response = $this->errorResponse('Unexpected error. Try later.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $response;
+        //return parent::render($request, $exception);
     }
 }
