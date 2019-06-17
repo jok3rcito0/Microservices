@@ -19,7 +19,7 @@ Route::get('/authors', 'AuthorController@index');
 Route::post('/authors', 'AuthorController@store');
 Route::get('/authors/{id}', 'AuthorController@show');
 
-Route::put('/authors/{$id}', 'AuthorController@update');
-Route::patch('/authors/{$id}', 'AuthorController@update');
+Route::put('/authors/{id}', 'AuthorController@update');
+Route::patch('/authors/{id}', 'AuthorController@update');
 
-Route::delete('/authors/{$id}', 'AuthorController@destroy');
+Route::delete('/authors/{id}', 'AuthorController@destroy');
