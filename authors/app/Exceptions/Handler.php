@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
             $response = $this->errorResponse($exception->getMessage(), Response::UNAUTHORIZED);
         }elseif ($exception instanceof ValidationException) {
             $errors = $exception->validator->errors()->getMessages();
-            $response = $this->errorResponse($errores, Response::HTTP_UNPROCESSABLE_ENTITY);
+            $response = $this->errorResponse($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
         }elseif ($exception instanceof \ErrorException && env('APP_DEBUG', false)) {
             $response = $this->errorResponse($exception->getMessage(), Response::HTTP_PRECONDITION_REQUIRED);
         }else{
