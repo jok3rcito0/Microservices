@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
         }elseif ($exception instanceof AuthorizationException) {
             $response = $this->errorResponse($exception->getMessage(), Response::FORBIDDEN);
         }elseif ($exception instanceof AuthenticationException) {
-            $response = $this->errorResponse($exception->getMessage(), Response::UNAUTHORIZED);
+            $response = $this->errorResponse($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
         }elseif ($exception instanceof ValidationException) {
             $errors = $exception->validator->errors()->getMessages();
             $response = $this->errorResponse($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
