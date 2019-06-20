@@ -13,9 +13,16 @@ class BookService
 	 */
 	public $base_uri;
 
+	/**
+	 * The secret to be used as authenticate key
+	 * @var string
+	 */
+	public $secret;
+
 	public function __construct()
 	{
 		$this->base_uri = config('services.books.base_uri');
+		$this->secret   = config('services.books.secret');
 	}
 
 	/**

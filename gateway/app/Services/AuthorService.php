@@ -13,9 +13,16 @@ class AuthorService
 	 */
 	public $base_uri;
 
+	/**
+	 * The secret to be used as authenticate key
+	 * @var string
+	 */
+	public $secret;
+
 	public function __construct()
 	{
 		$this->base_uri = config('services.authors.base_uri');
+		$this->secret   = config('services.authors.secret');
 	}
 
 	/**
