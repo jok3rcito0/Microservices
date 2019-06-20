@@ -47,8 +47,6 @@ class AuthorController extends Controller
         if($this->validate($request, $rules)){
             $author = Author::create($request->all());
             return $this->successResponse($author, Response::HTTP_CREATED);
-        }else{
-            dd('no paso');
         }
     }
 
