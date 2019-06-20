@@ -59,10 +59,8 @@ class AuthorController extends Controller
         $author = Author::findOrFail($id);
 
         if($author){
-            $response = $this->successResponse($author);
+            return $this->successResponse($author);
         }
-
-        return $response;
     }
 
     /**
