@@ -22,9 +22,9 @@ class BookService
 	 * Get the full list of books from the books service
 	 * @return string
 	 */
-	public function obtainBooks()
+	public function obtainBooks($page=1)
 	{
-		return $this->performRequest('GET', '/books');
+		return $this->performRequest('GET', "/books?page={$page}");
 	}
 
 	/**
